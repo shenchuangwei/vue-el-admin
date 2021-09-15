@@ -1,0 +1,44 @@
+export default {
+    logo: '商城后台系统',
+    topBar:{
+        activeIndex:'0',
+        list:[
+            {
+                name:'首页',
+                subActive:'0',
+                subMenu:[
+                    {
+                        title:'后台首页',
+                        icon:'el-icon-menu'
+                    },
+                    {
+                        title:'商品列表',
+                        icon:'el-icon-s-goods'
+                    },
+                ]
+            },
+            {
+                name:'商品',
+                subActive:'0',
+                subMenu:[
+                    {
+                        title:'商品列表',
+                        icon:'el-icon-menu'
+                    }
+                ]
+            },
+            {
+                name:'订单',
+                subActive:'0',
+            },
+            {
+                name:'会员',
+                subActive:'0',
+            },
+            {
+                name:'设置',
+                subActive:'0',
+            },
+        ]
+    }
+}
