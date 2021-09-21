@@ -20,17 +20,42 @@
           <!--侧边列表组-->
           <ul class="list-group list-group-flush" style="font-size: 12px">
 
-            <albumItem v-for="(item,index) of albums" :key="index" :item="item" :index="index" :albumIndex='albumIndex' @albumChange="albumChange" @albumDel="albumDel" @openEditModel="openEditModel"/>
+            <albumItem v-for="(item,index) of albums" :key="index" :item="item" :index="index" :albumIndex='albumIndex'
+                       @albumChange="albumChange" @albumDel="albumDel" @openEditModel="openEditModel"/>
 
           </ul>
         </el-aside>
         <el-container>
           <el-main>
             <!--内容主体部分-->
+            <el-row :gutter="10">
+              <el-col :span="24" :lg="4" :md="6" :sm="8" v-for="(item,index) in imageList" :key="item.id">
+                <el-card class="box-card mb-3 bg-white" shadow="hover" :body-style="{padding:0}"
+                         style="position: relative;cursor: pointer">
+                  <span class="badge badge-danger" v-show="item.isChecked"
+                        style="position: absolute;right: 0;top: 0">{{ item.checkOrder }}</span>
+                  <div class="border" :class="{'border-danger':item.isChecked}">
+                    <img :src="item.url" class="w-100" @click="checkImage(item)"/>
+                    <div class="w-100 text-white position-absolute"
+                         style="background-color: rgba(0,0,0,.5);margin-top: -24px;line-height: 24px;">
+                      <span class="small ml-2">{{ item.name }}</span>
+                    </div>
+                    <div class="text-center p-2">
+                      <!--图片预览，编辑和删除-->
+                      <el-button-group>
+                        <el-button class="p-2" size="mini" @click="previewImage(item)" icon="el-icon-view"></el-button>
+                        <el-button class="p-2" size="mini" @click="imageEdit(item)" icon="el-icon-edit"></el-button>
+                        <el-button class="p-2" size="mini" @click="imageDel(index)" icon="el-icon-delete"></el-button>
+                      </el-button-group>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
           </el-main>
         </el-container>
       </el-container>
-      <el-footer>
+      <el-footer class="bg-primary">
         <!--底部-->
       </el-footer>
     </el-container>
@@ -63,6 +88,12 @@
         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
     </el-dialog>
+    <!--预览图片弹出层-->
+    <el-dialog :visible.sync="previewModel">
+      <div style="margin: -60px -20px -30px">
+        <img class="w-100" :src="previewUrl">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,7 +102,7 @@ import albumItem from '@/components/image/album-item'
 
 export default {
   name: "index",
-  components: { albumItem },
+  components: {albumItem},
   data() {
     return {
       searchForm: {
@@ -89,10 +120,15 @@ export default {
       albumForm: {
         name: '',
         order: 0
-      }
+      },
+      previewModel: false,
+      previewUrl: '',
+      imageList: [],
+      //被选中照片的列表
+      chooseList: []
     }
   },
-  computed:{
+  computed: {
     modelTitle() {
       //判断弹出层标题title
       return this.albumEditIndex > -1 ? '修改相册' : '添加相册'
@@ -107,6 +143,17 @@ export default {
       for (let i = 0; i < 20; i++) {
         this.albums.push(
             {name: '相册' + i, num: Math.floor(Math.random() * 100), order: 0}
+        )
+      }
+      for (let i = 0; i < 20; i++) {
+        this.imageList.push(
+            {
+              id: i,
+              url: 'https://tangzhe123-com.oss-cn-shenzhen.aliyuncs.com/Appstatic/qsbk/demo/datapic/40.jpg',
+              name: '超级英雄',
+              isChecked: false,
+              checkOrder: 0
+            }
         )
       }
     },
@@ -161,34 +208,50 @@ export default {
       //修改对应索引相册
       this.albums[this.albumEditIndex].name = this.albumForm.name
       this.albums[this.albumEditIndex].order = this.albumForm.order
+    },
+    //打开预览图片
+    previewImage({url}) {
+      this.previewUrl = url
+      this.previewModel = true
+    },
+    //修改图片名称
+    imageEdit(item) {
+      this.$prompt('请输入新名称', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({value}) => {
+        if (!value) return this.$message.info('图片名称不能为空')
+        item.name = value
+        this.$message.success('图片名称修改成功')
+      }).catch(() => {
+        this.$message.info('取消输入')
+      })
+    },
+    //根据索引值删除图片
+    imageDel(index) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.imageList.splice(index, 1)
+        this.$message.success('删除成功')
+      }).catch(() => {
+        this.$message.error('已取消删除')
+      })
+    },
+    checkImage(item) {
+      if (!item.isChecked) {
+        this.chooseList.push({id: item.id, url: item.url})
+        item.checkOrder = this.chooseList.length
+        item.isChecked = !item.isChecked
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.el-header, .el-footer {
-  background-color: #B3C0D1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
-
-.el-main {
-  background-color: #E9EEF3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
-
-/*>>>>>>>>>>>*/
 .el-aside {
   position: absolute;
   top: 60px;
@@ -208,4 +271,5 @@ export default {
   background-color: #f0f9eb !important;
   border-color: #c2e7b0 !important;
 }
+
 </style>

@@ -35,7 +35,4 @@ export default {
   background: #9f9f9f;
   border-radius: 10px;
 }
-body {
-  min-width: 1366px;
-}
 </style>
