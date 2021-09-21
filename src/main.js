@@ -8,6 +8,7 @@ import $conf from './common/config/config'
 import VueRouter from "vue-router";
 import router from "./router";
 
+
 Vue.use(VueRouter);
 Vue.config.productionTip = false
 Vue.prototype.$conf = $conf

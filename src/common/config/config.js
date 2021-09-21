@@ -9,11 +9,18 @@ export default {
                 subMenu:[
                     {
                         title:'后台首页',
-                        icon:'el-icon-menu'
+                        icon:'el-icon-menu',
+                        pathname:'index'
                     },
                     {
                         title:'商品列表',
-                        icon:'el-icon-s-goods'
+                        icon:'el-icon-s-goods',
+                        pathname:'shop_goods_list'
+                    },
+                    {
+                        title:'相册管理',
+                        icon:'el-icon-picture',
+                        pathname:'image'
                     },
                 ]
             },
