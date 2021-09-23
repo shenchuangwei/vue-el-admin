@@ -49,7 +49,8 @@
           <!--面包屑导航-->
           <div class="border-bottom bg-white mb-3" style="padding: 20px;margin: -20px" v-if="bran.length">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-              <el-breadcrumb-item v-for="(item,index) of bran" :to="{path:item.path}" :key="index">{{ item.title }}
+              <el-breadcrumb-item v-for="(item,index) of bran" @click.native="branPathTo(item)" :key="index">
+                {{ item.title }}
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
@@ -130,6 +131,10 @@ export default {
       // console.log(key, keyPath);
       this.slideMenuActive = key;
       this.$router.push({name: this.slideMenu[key].pathname})
+    },
+    branPathTo(item) {
+      if (item.path === '/index') this.slideMenuActive = '0';
+      this.$router.push({path: item.path})
     }
   }
 }
