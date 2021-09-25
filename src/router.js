@@ -8,7 +8,14 @@ const router = new VueRouter({
     routes,
 })
 router.beforeEach((to, from, next) => {
-    if (window.sessionStorage.getItem('token')) return next()
+    if (window.sessionStorage.getItem('token')) {
+        //防止重复登陆
+        /*if (to.path === '/login') {
+            Vue.prototype.$message.error('请不要重复登陆')
+            return next(from.path)
+        }*/
+        return next()
+    }
     if (to.path === '/login') {
         return next()
     } else {

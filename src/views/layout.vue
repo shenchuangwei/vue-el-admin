@@ -114,9 +114,10 @@ export default {
     //读取缓存中的索引初始化顶部和侧边导航栏
     __initNavBar() {
       const navIndex = JSON.parse(window.sessionStorage.getItem('navActive'))
+      if (!navIndex) return
       this.topBar.activeIndex = navIndex.top
       this.slideMenuActive = navIndex.left
-      console.log(navIndex)
+      // console.log(navIndex)
     },
     getRouteBran() {
       //过滤名字为空的

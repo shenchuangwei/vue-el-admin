@@ -2,7 +2,8 @@ const routes = [
     {
         name: 'layout',
         path: '/',
-        redirect: {name: 'index'},
+        //重定向到登录页
+        redirect: {name: 'login'},
         component: 'layout',
         children: [
             {

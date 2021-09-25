@@ -3,7 +3,7 @@
     <!--tab标签页-->
     <el-tabs v-model="tabIndex" @tab-click="handleClick">
       <el-tab-pane label="基础设置">
-
+        <!--基础设置-->
         <el-form ref="form" label-width="80px">
           <el-form-item label="商品名称">
             <el-input v-model="form.title" placeholder="请输入商品名称，不能超过60个字符" class="w-50"></el-input>
@@ -50,7 +50,8 @@
 
       </el-tab-pane>
       <el-tab-pane label="商品规格">
-
+        <!--商品规格
+        0-->
         <el-form ref="form" label-width="80px">
           <el-form-item class="mb-2" label="商品规格">
             <el-radio-group v-model="skus_type" size="mini">
