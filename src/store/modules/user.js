@@ -12,14 +12,18 @@ export default {
         login(state, user) {
             state.user = user
             state.token = user.token
-            // console.log(state.user);
-            window.sessionStorage.setItem('user',JSON.stringify(user))
-            window.sessionStorage.setItem('token',JSON.stringify(user.token))
+            window.sessionStorage.setItem('user', JSON.stringify(user))
+            window.sessionStorage.setItem('token', user.token)
+        },
+        logExit(state) {
+            state.user = []
+            state.token = false
+            window.sessionStorage.clear()
         }
     },
     state: {
         user: [],
-        token: ''
+        token: false
     },
     getters: {}
 }

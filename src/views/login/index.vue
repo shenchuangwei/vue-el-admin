@@ -69,12 +69,7 @@ export default {
               this.$router.push({name: 'index'})
             }
         ).catch(
-            err => {
-              this.loading = false
-              if (err.response && err.response.data && err.response.data.errorCode) {
-                this.$message.error(err.response.data.msg)
-              }
-            }
+            err => this.loading = false
         )
       });
     },

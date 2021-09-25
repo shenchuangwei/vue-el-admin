@@ -39,10 +39,7 @@
               <i :class="item.icon"></i>
               <span slot="title">{{ item.title }}</span>
             </el-menu-item>
-            <!--<el-menu-item index="2">
-                  <i class="el-icon-document"></i>
-                  <span slot="title">商品列表</span>
-                </el-menu-item>-->
+
           </el-menu>
         </el-aside>
         <!--内容主体区-->
@@ -76,23 +73,25 @@ export default {
   },
   //初始化topBar，使其等于原型上的topBar
   created() {
-    this.topBar = this.$conf.topBar;
-    // this.getRouteBran();
+    this.topBar = this.$conf.topBar
+    this.getRouteBran()
+    this.__initNavBar()
   },
   computed: {
     //获取存储在vuex中的user
     ...mapState(
         {user: state => state.user.user}
     ),
+    //当前左侧菜单激活项索引
     slideMenuActive: {
       get() {
-        return this.topBar.list[this.topBar.activeIndex].subActive || '';
+        return this.topBar.list[this.topBar.activeIndex].subActive || ''
       },
       set(val) {
         this.topBar.list[this.topBar.activeIndex].subActive = val
       }
     },
-    //计算侧边栏信息
+    //当前侧边栏列表
     slideMenu() {
       return this.topBar.list[this.topBar.activeIndex].subMenu || []
     }
@@ -100,17 +99,28 @@ export default {
   watch: {
     //监视路由的变化,当路径发生变化时执行面包屑修改
     $route: {
-      immediate: true,
       handler() {
+        //将侧边栏索引跟top导航栏索引存到缓存中
+        window.sessionStorage.setItem('navActive', JSON.stringify({
+          top: this.topBar.activeIndex,
+          left: this.slideMenuActive
+        }))
         this.getRouteBran()
       }
     }
   },
   mixins: [common],
   methods: {
+    //读取缓存中的索引初始化顶部和侧边导航栏
+    __initNavBar() {
+      const navIndex = JSON.parse(window.sessionStorage.getItem('navActive'))
+      this.topBar.activeIndex = navIndex.top
+      this.slideMenuActive = navIndex.left
+      console.log(navIndex)
+    },
     getRouteBran() {
       //过滤名字为空的
-      let bran = this.$route.matched.filter(value => value.name);
+      let bran = this.$route.matched.filter(value => value.name)
       //过滤掉name值为layout和index
       const arr = [];
       bran.forEach((element) => {
@@ -130,20 +140,39 @@ export default {
     topBarSelect(key, keyPath) {
       if (key == '6-1') return console.log('修改')
       if (key == '6-2') {
-        sessionStorage.clear()
-        this.$message.success('退出成功')
-        this.$router.push({name: 'login'})
+        return this.axios.post('/admin/logout', {}, {
+          token: true,
+        }).then(res => {
+          this.$message('退出成功')
+          // 清除状态和存储
+          this.$store.commit('logExit')
+          // 返回到登录页
+          this.$router.push({name: "login"})
+        }).catch(err => {
+          console.log(err.response);
+          // 清除状态和存储
+          this.$store.commit('logExit')
+          // 返回到登录页
+          this.$router.push({name: "login"})
+        })
       }
-      // console.log(key, keyPath);
+      //当前激活的菜单索引
       this.topBar.activeIndex = key;
+      // this.slideMenuActive = '0'
+      // 默认选中跳转到当前激活
+      if (this.slideMenu.length > 0) {
+        this.$router.push({
+          name: this.slideMenu[this.slideMenuActive].pathname
+        })
+      }
     },
     sideSelect(key, keyPath) {
-      // console.log(key, keyPath);
       this.slideMenuActive = key;
       this.$router.push({name: this.slideMenu[key].pathname})
     },
+    //面包屑导航跳转
     branPathTo(item) {
-      if (item.path === '/index') this.slideMenuActive = '0';
+      if (item.path === '/index') this.slideMenuActive = '0'
       this.$router.push({path: item.path})
     }
   }

@@ -30,7 +30,8 @@ export default {
                 subMenu:[
                     {
                         title:'商品列表',
-                        icon:'el-icon-menu'
+                        icon:'el-icon-menu',
+                        pathname:'shop_goods_list'
                     }
                 ]
             },

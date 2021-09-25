@@ -7,6 +7,15 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     routes,
 })
+router.beforeEach((to, from, next) => {
+    if (window.sessionStorage.getItem('token')) return next()
+    if (to.path === '/login') {
+        return next()
+    } else {
+        Vue.prototype.$message.error('请登录您的账号！')
+        next('/login')
+    }
+})
 //解决重复点击导航时，控制台出现报错
 const VueRouterPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(to) {
