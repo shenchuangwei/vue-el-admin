@@ -16,8 +16,9 @@
           </el-menu-item>
           <el-submenu index="100">
             <template slot="title">
-              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-              summer
+              <el-avatar
+                  :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' || user.avatar"></el-avatar>
+              {{ user.username }}
             </template>
             <el-menu-item index="6-1">修改</el-menu-item>
             <el-menu-item index="6-2">退出</el-menu-item>
@@ -63,6 +64,7 @@
 
 <script>
 import common from "@/common/mixin/common";
+import {mapState} from 'vuex'
 
 export default {
   name: "layout",
@@ -78,6 +80,10 @@ export default {
     // this.getRouteBran();
   },
   computed: {
+    //获取存储在vuex中的user
+    ...mapState(
+        {user: state => state.user.user}
+    ),
     slideMenuActive: {
       get() {
         return this.topBar.list[this.topBar.activeIndex].subActive || '';
@@ -123,7 +129,11 @@ export default {
     },
     topBarSelect(key, keyPath) {
       if (key == '6-1') return console.log('修改')
-      if (key == '6-2') return console.log('退出')
+      if (key == '6-2') {
+        sessionStorage.clear()
+        this.$message.success('退出成功')
+        this.$router.push({name: 'login'})
+      }
       // console.log(key, keyPath);
       this.topBar.activeIndex = key;
     },

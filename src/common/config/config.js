@@ -1,5 +1,5 @@
 export default {
-    logo: '商城后台系统',
+    logo: 'UNI-ADMIN',
     topBar:{
         activeIndex:'0',
         list:[

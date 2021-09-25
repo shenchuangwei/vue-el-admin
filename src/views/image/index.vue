@@ -221,6 +221,7 @@ export default {
       this.albums.unshift(
           {name: this.albumForm.name, order: this.albumForm.order, num: 0}
       )
+      console.log(this.albums)
       this.$message.success('修改添加成功')
       this.albumEditModel = false
     },

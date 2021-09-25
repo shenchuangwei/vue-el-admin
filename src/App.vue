@@ -1,43 +1,41 @@
 <template>
-<div>
-  <router-view></router-view>
-</div>
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'App',
   components: {},
-  data() {
-      return {
-        radio:3
-      }
+  created() {
+    this.$store.commit('__initUser')
   },
-  methods:{
-
-  }
+  data() {
+    return {
+      radio: 3
+    }
+  },
+  methods: {}
 }
 </script>
 
 <style>
-::-webkit-scrollbar-track
-{
-  background: rgba(0,0,0,.1);
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, .1);
   border-radius: 0;
 }
 
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 10px;
   height: 10px;
 }
 
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
   cursor: pointer;
   border-radius: 5px;
-  background: rgba(0,0,0,.25);
+  background: rgba(0, 0, 0, .25);
   transition: color .2s ease;
 }
 </style>

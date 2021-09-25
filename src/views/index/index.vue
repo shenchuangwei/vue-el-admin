@@ -53,7 +53,7 @@
       </el-col>
     </el-row>
     <!-- 销售情况统计 | 单品销售排名 -->
-    <el-row :gutter="20" class="mt-3">
+    <el-row :gutter="20" class="mt-3 mb-5">
       <!--销售情况统计-->
       <el-col :span="12">
         <el-card shadow="never">
